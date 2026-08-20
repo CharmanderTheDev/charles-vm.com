@@ -1,0 +1,16 @@
+---
+import Background from "../components/Background.astro";
+import { ClientRouter } from "astro:transitions";
+---
+
+<html lang="en">
+<head>
+    <ClientRouter />
+    <title>Charles V. M.</title>
+</head>
+
+<body class="flex flex-col h-screen">
+<Background />
+<slot />
+</body>
+</html>

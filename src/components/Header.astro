@@ -1,0 +1,23 @@
+---
+import Glass from "./Glass.astro";
+import { Image } from "astro:assets";
+import logo from "../resources/images/logo.png";
+import conway from "../resources/images/conway.png";
+---
+<header class="mx-4 my-4"><Glass>
+    <div class="flex justify-between items-center py-4 pr-6 max-w-6xl mx-auto">
+        <div class="flex items-center gap-2">
+            <Image src={logo} alt="logo" class="h-8 w-8"/>
+            <a href="/" class="font-oxanium font-medium">Charles V. M.</a>
+        </div>
+
+
+        <nav class="flex gap-4 font-light">
+            <a href="/contact">Contact</a>
+            <a href="/portfolio">Portfolio</a>
+            <a href="/resume">Resume</a>
+            <a href="/conway"><Image src={conway} alt="conway glider" class="h-8 w-8" format="png"/></a>
+        </nav>
+
+    </div>
+</Glass></header>

@@ -1,0 +1,29 @@
+---
+import Glass from './Glass.astro'
+
+interface Props {
+    name: string;
+    type: string;
+    description: string;
+    skills: string[];
+    link: string;
+}
+
+const { name, type, description, skills, link } = Astro.props;
+---
+<a href={link} target="_blank" rel="noopener noreferrer"><Glass class="flex flex-col h-full p-2 text-s">
+    <div class="flex gap-2">
+        <p class="font-oxanium">{name}</p>
+        <p class="text-sm text-gray-500">{type}</p>
+    </div>
+
+    <p class="text-sm">{description}</p>
+
+    <div class="mt-auto flex gap-1">
+        {skills.map((skill) =>
+
+            <p class="align-bottom glass mt-auto p-1 text-xs">{skill}</p>
+        )}
+    </div>
+
+</Glass></a>

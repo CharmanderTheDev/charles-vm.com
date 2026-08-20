@@ -1,17 +1,187 @@
 ---
+import "../styles/global.css"
+import Header from "../components/Header.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import Glass from "../components/Glass.astro";
 
+import { Image } from "astro:assets";
+import discord from "../resources/images/discord-white.svg"
+import email from "../resources/images/email-white.svg"
+import github from "../resources/images/github-white.svg"
+import linkedin from "../resources/images/linkedin-white.svg"
+import ProjectCard from "../components/ProjectCard.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<script>
+
+    document.addEventListener("astro:page-load", () => {
+        const favorite = document.querySelector("#favorite")!;
+
+        const favorites =
+            [
+                ["programming language", "Rust"],
+                ["${selection[0]}", "${selection[1]}"],
+                ["ice cream flavor", "peanut butter"],
+                ["manga", "<i>Blame!</i>"],
+                ["movie", "<i>Sinners</i>"],
+                ["color", "magenta"],
+                ["video game", "<i>Factorio</i>"],
+                ["animal", "bunny"],
+                ["book", "<i>Permutation City</i>"],
+                ["fun fact: try dragging your mouse around"],
+                ["number", "64"],
+            ]
+
+        let selection = favorites[Math.floor(Math.random() * favorites.length)]
+        if (selection.length == 2) {
+            favorite.innerHTML = `fun fact: my favorite ${selection[0]} is ${selection[1]}`;
+        } else {
+            favorite.innerHTML = `${selection[0]}`
+        }
+
+        let lastTime = 0;
+        let lastSelection = 0;
+
+        function animate(time: number) {
+
+            requestAnimationFrame(animate);
+
+
+            if ((time - lastTime) > 1500) {
+
+                lastTime = time;
+
+                if (Math.random() > (1 - (1 / 1024))) {
+
+                    favorite.innerHTML = "fun fact: im very lucky";
+                    return;
+                }
+
+                let selectionIndex = lastSelection;
+                while (selectionIndex == lastSelection) {
+                    selectionIndex = Math.floor(Math.random() * favorites.length);
+                }
+                lastSelection = selectionIndex;
+
+                selection = favorites[selectionIndex];
+                if (selection.length == 2) {
+                    favorite.innerHTML = `fun fact: my favorite ${selection[0]} is ${selection[1]}`;
+                } else {
+                    favorite.innerHTML = `${selection[0]}`
+                }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    });
+</script>
+
+<MainLayout>
+    <main class="pb-4 grid grid-cols-2 grid-rows-2 gap-4 px-4 flex-1">
+
+        <Glass class="flex flex-col px-4 py-4">
+            <div class="flex gap-2">
+                <h1 class="font-oxanium text-4xl">who</h1>
+                <p class="text-gray-500">(about me)</p>
+            </div>
+
+            <p class="text-md">
+                I am Charles Victor Mounce, a full-time student at <b>Rensselaer Polytechnic Institute </b>
+                working toward a Double B.S. in <b>Mathematics & Computer Science</b>
+                , with a minor in <b>Information Technology & Web Science</b>.
+                I frequently explore these subjects outside of my coursework, and
+                i hope to pursue a career in <b>cybersecurity.</b>
+            </p>
+
+            <p class="mt-auto font-oxanium" id="favorite"><b>
+                fun fact: my favorite x is y!
+            </b></p>
+
+        </Glass>
+
+        <Glass class="row-span-2 px-4 py-4 flex flex-col">
+            <div class="flex gap-2 mt-auto">
+                <h1 class="font-oxanium text-4xl">what</h1>
+                <p class="text-gray-500">(portfolio highlights)</p>
+            </div>
+
+            <div class="grid grid-cols-2 grid-rows-3 gap-2 flex-1">
+
+                <ProjectCard
+                        name="QRTsReallyTiny"
+                        type="project"
+                        description="a minimalist hobby language built upon prefix notation and binary functions, interpreted with rust"
+                        skills={["rust","programming","language design"]}
+                        link="https://github.com/CharmanderTheDev/QRTsReallyTiny"
+                />
+                <ProjectCard
+                        name="swarm-intelligence"
+                        type="research"
+                        description="an experiment in the evolution of swarm intelligence by natural selection"
+                        skills={["c++","research", "simulation"]}
+                        link="https://github.com/CharmanderTheDev/swarm-intelligence"
+                />
+                <ProjectCard 
+                        name="autocells"
+                        type="research"
+                        description="research into a specific phenomena related to cellular automata"
+                        skills={["rust","research","mathematics"]}
+                        link="./"
+                />
+                <ProjectCard
+                        name="charles-vm.com"
+                        type="website"
+                        description="my personal website, built by hand using Astro + Tailwind. Try dragging your mouse around to see my favorite part!"
+                        skills={["astro","programming","webdev"]}
+                        link="./"
+                />
+                <ProjectCard
+                        name="MetaProduction"
+                        type="game engine"
+                        description="an engine enabling an automation game with computationally cheap infinite scalability"
+                        skills={["rust","software engineering","library design"]}
+                        link="https://github.com/CharmanderTheDev/MetaProduction"
+                />
+            </div>
+
+        </Glass>
+
+        <Glass class="px-4 py-4 flex flex-col">
+            <div class="flex gap-2 mt-auto">
+                <h1 class="font-oxanium text-4xl">where</h1>
+                <p class="text-gray-500">(contact)</p>
+            </div>
+
+            <div class="grid grid-cols-2 grid-rows-2 gap-2 flex-1">
+
+                <a href="https://discord.com/users/499683473129472006" target="_blank" rel="noopener noreferrer"><Glass>
+                    <div class="flex items-center">
+                        <Image src={discord} alt="discord logo" class="h-16 w-16 m-2"/>
+                        <p class="font-oxanium">charmander_the_dev</p>
+                    </div>
+                </Glass></a>
+                <a href="mailto:cvmounce07@gmail.com" target="_blank" rel="noopener noreferrer"><Glass>
+                    <div class="flex items-center">
+                        <Image src={email} alt="email logo" class="h-16 w-16 m-2"/>
+                        <p class="font-oxanium">cvmounce07@gmail.com</p>
+                    </div>
+                </Glass></a>
+                <a href="https://github.com/CharmanderTheDev" target="_blank" rel="noopener noreferrer"><Glass>
+                    <div class="flex items-center">
+                        <Image src={github} alt="github logo" class="h-16 w-16 m-2"/>
+                        <p class="font-oxanium">CharmanderTheDev</p>
+                    </div>
+                </Glass></a>
+                <a href="https://www.linkedin.com/in/charles-mounce/" target="_blank" rel="noopener noreferrer"><Glass>
+                    <div class="flex items-center">
+                        <Image src={linkedin} alt="linkedin logo" class="h-16 w-16 m-2"/>
+                        <p class="font-oxanium">Charles Mounce</p>
+                    </div>
+                </Glass></a>
+
+            </div>
+
+        </Glass>
+
+    </main>
+</MainLayout>

@@ -1,0 +1,182 @@
+---
+
+---
+<canvas id="background" transition:persist></canvas>
+
+<style>
+    #background {
+
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+
+        background-color: rgba(0, 0, 0, 1.0);
+    }
+</style>
+
+
+<script>
+
+    const mod = (a: number, b: number): number => ((a % b) + b) % b;
+
+    const canvas = document.getElementById("background") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+
+        ctx.scale(dpr, dpr);
+
+        let states: boolean[][] = [];
+        for (let i = 0; i < window.innerWidth / PixelsPerCell; i++) {
+            states.push([]);
+
+            for (let j = 0; j < window.innerHeight / PixelsPerCell; j++) {
+
+                states[i].push(false);
+            }
+        }
+    }
+
+    const PixelsPerCell = 12;
+
+    let states: boolean[][] = [];
+    for (let i = 0; i < window.innerWidth / PixelsPerCell; i++) {
+        states.push([]);
+
+        for (let j = 0; j < window.innerHeight / PixelsPerCell; j++) {
+
+            states[i].push(false);
+        }
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    // "index states", uses modulus to wrap-around indices
+    function istates(x: number, y: number) {
+
+        return states[mod(x, states.length)][mod(y, states[0].length)];
+    }
+    
+    function setistates(x: number, y: number, set: boolean) {
+
+        states[mod(x, states.length)][mod(y, states[0].length)] = set;
+    }
+
+    function randint(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    let last_time = 0;
+
+    function animate(time: number) {
+
+        requestAnimationFrame(animate);
+
+        if (time - last_time < 62.5) { return; }
+        last_time = time;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let next_states: boolean[][] = [];
+
+        for (let i = 0; i < states.length; i++) {
+
+            next_states.push([]);
+
+            for (let j = 0; j < states[i].length; j++) {
+
+                let alive_neighbors = 0;
+                [
+                    istates(i - 1, j - 1),
+                    istates(i - 1, j),
+                    istates(i - 1, j + 1),
+                    istates(i, j - 1),
+                    istates(i, j + 1),
+                    istates(i + 1, j - 1),
+                    istates(i + 1 , j),
+                    istates(i + 1, j + 1),
+                ].forEach((alive) => { alive_neighbors += alive?1:0; });
+
+                if (states[i][j]) {
+
+                    if (alive_neighbors < 2) { next_states[i].push(false); }
+                    else if (alive_neighbors > 3) { next_states[i].push(false); }
+                    else { next_states[i].push(true); }
+                }
+
+                else {
+
+                    if (alive_neighbors == 3) { next_states[i].push(true); }
+                    else { next_states[i].push(false); }
+                }
+
+                if (!states[i][j]) { continue; }
+
+                ctx.fillStyle = "gray";
+                ctx.fillRect(i * PixelsPerCell, j * PixelsPerCell, PixelsPerCell, PixelsPerCell);
+            }
+        }
+
+        states = next_states;
+    }
+
+    let drawing = false;
+
+    function draw_pixel(px: number, py: number) {
+
+        const rect = canvas.getBoundingClientRect();
+
+        const x = Math.floor((px - rect.left) / PixelsPerCell);
+        const y = Math.floor((py - rect.top) / PixelsPerCell);
+
+        states[x][y] = true;
+    }
+
+    document.addEventListener("mousedown", (event) => {
+
+        draw_pixel(event.clientX, event.clientY);
+
+        last_x = event.x;
+        last_y = event.y;
+
+        drawing = true;
+    });
+
+    document.addEventListener("mouseup", () => {
+        drawing = false;
+    });
+
+    let last_x = 0;
+    let last_y = 0;
+
+    document.addEventListener("mousemove", (event) => {
+        if (!drawing) return;
+
+        let magnitude = (((event.clientX - last_x) ** 2) + ((event.clientY - last_y) ** 2)) ** 1/2;
+        let dx = (event.clientX - last_x) / magnitude;
+        let dy = (event.clientY - last_y) / magnitude;
+
+        let x = last_x;
+        let y = last_y;
+
+        for (let i = 0; i < magnitude; i++) {
+
+            x += dx; y += dy; draw_pixel(x, y);
+        }
+
+        last_x = event.clientX;
+        last_y = event.clientY;
+    });
+
+    requestAnimationFrame(animate);
+</script>
