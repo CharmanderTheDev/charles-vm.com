@@ -6,6 +6,11 @@
     --font-oxanium: "Oxanium", sans-serif;
 }
 
+::selection {
+
+    background-color: rgba(100, 100, 100, 0.75)
+}
+
 .glass {
     position: relative;
     overflow: hidden;
