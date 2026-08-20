@@ -3,6 +3,7 @@ import Glass from "./Glass.astro";
 import { Image } from "astro:assets";
 import logo from "../resources/images/logo.png";
 import conway from "../resources/images/conway.png";
+import download from "../resources/images/download.png";
 ---
 <header class="mx-4 my-4"><Glass>
     <div class="flex justify-between items-center py-4 pr-6 max-w-6xl mx-auto">
@@ -12,10 +13,11 @@ import conway from "../resources/images/conway.png";
         </div>
 
 
-        <nav class="flex gap-4 font-light">
-            <a href="/contact">Contact</a>
-            <a href="/portfolio">Portfolio</a>
-            <a href="/resume">Resume</a>
+        <nav class="flex font-light">
+            <a href="/contact" class="mx-2">Contact</a>
+            <a href="/portfolio" class="mx-2">Portfolio</a>
+            <a href="/resume" class="ml-2 mr-1"><div class="flex items-center"><p class="mr-1">Resume</p>
+            <Image src={download} loading="eager" alt="download" class="h-4 w-4 mr-4"/></div></a>
             <a href="/conway"><Image src={conway} loading="eager" alt="conway glider" class="h-8 w-8" format="png"/></a>
         </nav>
 
