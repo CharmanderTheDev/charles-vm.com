@@ -1,18 +1,16 @@
 ---
 import "../styles/global.css"
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/Header.astro";
 import Glass from "../components/Glass.astro";
-import logo from "../resources/images/logo.png";
-import conway from "../resources/images/conway.png";
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
+import white_house from "../resources/images/white-house.png"
 ---
 
 <BaseLayout>
     <a href="/" class="w-fit mx-4 my-4"><Glass class="px-4">
         <div class="py-1">
 
-            <p class="font-oxanium font-bold">&lt;-</p>
+            <Image src={white_house} loading="eager" alt="white-house" class="h-6 w-6"/>
 
         </div>
     </Glass></a>
